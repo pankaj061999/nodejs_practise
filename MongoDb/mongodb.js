@@ -1,34 +1,24 @@
-const MongoClient = require("mongodb").MongoClient;
-const url = "mongodb://localhost:27017/";
+const { MongoClient } = require("mongodb");
 
-// Create Instance of MongoClient for mongodb
+// Replace the uri string with your connection string.
+// const url = "mongodb+srv://fantigerapis:marea4lEmG5I4pHM@cluster1.e8hc9ph.mongodb.net";
+const url = "mongodb://localhost:27017"
 
-// MongoClient.connect(url, { useNewurlparser: true }, (error, client) => {
-//   if (error) {
-//     return console.log("not connect mongodb");
-//   } else {
-//     console.log("cline");
-//     const db = client.db("config");
-//     db.collection("e-commerse").insertOne({
-//       name: "Jupiter",
-//       age: 24,
-//     });
-//   }
-// });
 const client = new MongoClient(url);
+const database = "local"
 
-// Connect to database
-client
-  .connect()
-  .then((item) => {
-    console.log("Connected Successfully");
-    client.close();
-  })
-  .catch((error) => console.log("Failed to connect", error));
-// const newpromise = new Promise((resolve, reject) => {
-//   resolve("hey this is resolved condtion");
-// });
 
-// newpromise.then((item) => {
-//   console.log(item);
-// });
+async function getData() {
+  try {
+   const result = await client.connect();
+  const db = result.db(database)
+
+  const collection = db.collection("startup_log")
+
+  const finalresult = await collection.find({ }).toArray()
+  console.log(finalresult)
+  } finally {
+    await client.close();
+  }
+}
+getData().catch(console.dir);
